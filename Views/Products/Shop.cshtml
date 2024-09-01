@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Ecom.Models.Product>
+@{
+        ViewData["Title"] = "Products";
+
+}
+<div class="row">
+    <div class="row">
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <p class="h3">All Products</p>
+</div>
+@foreach (var item in Model)
+{
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow h-100" data-url="@Url.Action("Details", new { id = item.Id })" onclick="window.location=this.dataset.url">
+                <img src="@item.ImageUrl" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    @* <iconify-icon class="star" icon="ic:round-star-rate"></iconify-icon>
+                    <iconify-icon class="star" icon="ic:round-star-rate"></iconify-icon>
+                    <iconify-icon class="star" icon="ic:round-star-rate"></iconify-icon>
+                    <iconify-icon class="star" icon="ic:round-star-rate"></iconify-icon>
+                    <iconify-icon icon="ic:round-star-outline"></iconify-icon> *@
+                    <p class="card-text">Rs @item.Price/-</p>
+                </div>
+            </div>
+        </div> 
+    </div>
+}
+

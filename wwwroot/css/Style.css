@@ -1,0 +1,101 @@
+﻿.navbar-nav .nav-link.active {
+    color: #903D10;
+}
+
+.nav-div {
+    display: flex;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.img-logo {
+    width: 80px;
+}
+
+iconify-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
+.cart {
+    color: #114683;
+    font-size: 48px;
+}
+
+.brand {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.display-4 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #903D10;
+}
+
+.btn-primary {
+    background-color: #114683;
+}
+
+.image {
+    width: 600px;
+}
+
+    .image .rounded-6 {
+        width: 600px;
+        height: auto;
+        border-radius: 5em;
+    }
+
+.about-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.about-des {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lights {
+    width: 200px;
+}
+
+.categories-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.top-container {
+    display: flex;
+    gap: 50px;
+}
+
+.card {
+    border-radius: 20px;
+}
+
+.card-img-top {
+    height: 16em;
+    border-radius: 20px 20px 30px 0px;
+}
+
+.card-body {
+    text-align: center;
+}
+
+.star {
+    color: gold;
+}
+.quantity{
+    width :14% !important
+}

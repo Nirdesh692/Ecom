@@ -1,0 +1,52 @@
+﻿@model Ecom.Models.Cart
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-5">
+    <h2>Cart</h2>
+    <table class="table">
+        <thead>
+            <tr class="text-center">
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model.CartItems)
+            {
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img src="@item.Product.ImageUrl" class="img-fluid" alt="Sofa" style="width: 120px; border-radius: 10px;">
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-control">
+                        <button class=" btn btn-outline-primary" onclick="">-</button>
+                        <input class="btn btn-outline-primary quantity" type="text" value="@item.Quantity" readonly>
+                        <button class="btn btn-outline-primary" onclick="">+</button>
+                    </div>
+                </td>
+                    <td>Rs @item.UnitPrice</td>
+                    <td>Rs @item.TotalPrice</td>
+                <td>
+                        <form method="post" asp-controller="Carts" asp-action="RemoveFromCart">
+                            <input type="hidden" name="cartItemId" value="@Html.ValueFor(model => item.Id)" />
+                            <button class="btn btn-link text-danger p-0">×</button>
+                        </form>
+                </td>
+            </tr>
+                
+            }
+    <div class="d-flex justify-content-between">
+        <a href="#" class="continue-shopping">&larr; Continue shopping</a>
+        <span class="cart-total">Total: Rs @Model.GrandTotal </span>
+    </div>
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary mt-4">Checkout</button>
+</div>
