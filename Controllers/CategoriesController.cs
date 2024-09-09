@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ecom.Models;
 using Microsoft.AspNetCore.Authorization;
 using Ecom.Data;
+using Ecom.Migrations;
 
 namespace Ecom.Controllers
 {
@@ -36,14 +37,14 @@ namespace Ecom.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
+            var item = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            if (item == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(item);
         }
 
         // GET: Categories/Create
@@ -59,16 +60,16 @@ namespace Ecom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Category item)
         {
             if (ModelState.IsValid)
             {
-                category.Id = Guid.NewGuid();
-                _context.Add(category);
+                item.Id = Guid.NewGuid();
+                _context.Add(item);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(item);
         }
 
         // GET: Categories/Edit/5
@@ -80,12 +81,12 @@ namespace Ecom.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var item = await _context.Categories.FindAsync(id);
+            if (item == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(item);
         }
 
         // POST: Categories/Edit/5
@@ -94,9 +95,9 @@ namespace Ecom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description")] Category category)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description")] Category item)
         {
-            if (id != category.Id)
+            if (id != item.Id)
             {
                 return NotFound();
             }
@@ -105,12 +106,12 @@ namespace Ecom.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(item);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!CategoryExists(item.Id))
                     {
                         return NotFound();
                     }
@@ -121,7 +122,7 @@ namespace Ecom.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(item);
         }
 
         // GET: Categories/Delete/5
@@ -133,14 +134,14 @@ namespace Ecom.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
+            var item = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            if (item == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(item);
         }
 
         // POST: Categories/Delete/5
@@ -149,17 +150,17 @@ namespace Ecom.Controllers
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
+            var item = await _context.Categories.FindAsync(id);
+            if (item != null)
             {
-                _context.Categories.Remove(category);
+                _context.Categories.Remove(item);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(Guid id)
+            private bool CategoryExists(Guid id)
         {
             return _context.Categories.Any(e => e.Id == id);
         }

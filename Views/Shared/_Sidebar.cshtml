@@ -1,0 +1,78 @@
+﻿<div class="bg-light border-right p-3" id="sidebar-wrapper" style="width: 250px;">
+    <h5 class="font-weight-bold">Filters</h5>
+    <form id="filterForm" method="get" action="@Url.Action("Search", "Shop")">
+        <input type="hidden" name="searchString" value="@(ViewContext.HttpContext.Request.Query["searchString"].ToString())" />
+        <div class="form-group">
+            <h6>Filter by Category</h6>
+            @foreach (var item in ViewBag.Categories as List<Ecom.Models.Category>)
+            {
+                <div class="form-check">
+                    <input type="checkbox" name="categories" value="@item.Name" class="form-check-input" id="item_@item.Id"
+                           onchange="submitForm()"
+                    @(ViewContext.HttpContext.Request.Query["categories"].Contains(item.Name) ? "checked" : "") />
+                    <label class="form-check-label" for="item_@item.Id">
+                        @item.Name
+                    </label>
+                </div>
+            }
+            <div class="form-group mt-3">
+                <h6>Filter by Price</h6>
+                <div class="slider-container">
+                    @{
+                        var minPrice = ViewContext.HttpContext.Request.Query["MinPrice"];
+                        var maxPrice = ViewContext.HttpContext.Request.Query["MaxPrice"];
+
+                        minPrice = string.IsNullOrEmpty(minPrice) ? "0" : minPrice;
+                        maxPrice = string.IsNullOrEmpty(maxPrice) ? "500000" : maxPrice;
+                    }
+                <input type="range" class="form-range" id="minPriceSlider" min="0" max="500000" step="1000" value="@minPrice" />
+                <input type="range" class="form-range" id="maxPriceSlider" min="0" max="500000" step="1000" value="@maxPrice" />
+
+                </div>
+                <p id="priceValue">Price: Rs <span id="minPriceValue">@minPrice</span> — Rs <span id="maxPriceValue">@maxPrice</span></p>
+
+                <input type="hidden" id="minPrice" name="minPrice" value="@minPrice" />
+                <input type="hidden" id="maxPrice" name="maxPrice" value="@maxPrice" />
+            </div>
+
+        </div>
+    </form>
+</div>
+<script>
+    function submitForm() {
+        document.getElementById("filterForm").submit();
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        var minPriceSlider = document.getElementById('minPriceSlider');
+        var maxPriceSlider = document.getElementById('maxPriceSlider');
+        var minPriceValue = document.getElementById('minPriceValue');
+        var maxPriceValue = document.getElementById('maxPriceValue');
+        var minPriceInput = document.getElementById('minPrice');
+        var maxPriceInput = document.getElementById('maxPrice');
+
+        minPriceSlider.addEventListener('input', function () {
+            if (parseInt(minPriceSlider.value) > parseInt(maxPriceSlider.value)) {
+                minPriceSlider.value = maxPriceSlider.value;
+            }
+            minPriceValue.textContent = minPriceSlider.value;
+            minPriceInput.value = minPriceSlider.value;
+        });
+
+        maxPriceSlider.addEventListener('input', function () {
+            if (parseInt(maxPriceSlider.value) < parseInt(minPriceSlider.value)) {
+                maxPriceSlider.value = minPriceSlider.value;
+            }
+            maxPriceValue.textContent = maxPriceSlider.value;
+            maxPriceInput.value = maxPriceSlider.value;
+        });
+
+        minPriceSlider.addEventListener('change', function () {
+            document.getElementById('filterForm').submit();
+        });
+
+        maxPriceSlider.addEventListener('change', function () {
+            document.getElementById('filterForm').submit();
+        });
+    });
+
+</script>

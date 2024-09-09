@@ -1,15 +1,52 @@
-﻿@{
+﻿@model Ecom.ViewModel.ShopView
+@{
     ViewData["Title"] = "Home Page";
 }
-
+@{
+    var sofa = new Dictionary<string, string>
+    {
+        {"categories","Sofa"},
+        {"minPrice","0"},
+        {"maxPrice","500000"}
+    };
+    var bed = new Dictionary<string, string>
+    {
+        {"categories","Bed"},
+        {"minPrice","0"},
+        {"maxPrice","500000"}
+    };
+    var chair = new Dictionary<string, string>
+    {
+        {"categories","Chair"},
+        {"minPrice","0"},
+        {"maxPrice","500000"}
+    };
+        var curtain = new Dictionary<string, string>
+    {
+        {"categories","Curtains"},
+        {"minPrice","0"},
+        {"maxPrice","500000"}
+    };
+    var kitchen = new Dictionary<string, string>
+    {
+        {"categories","Kitchen"},
+        {"minPrice","0"},
+        {"maxPrice","500000"}
+    };
+    var wardrobe = new Dictionary<string, string>
+    {
+        {"categories","Wardrode"},
+        {"minPrice","0"},
+        {"maxPrice","500000"}
+    };
+}
     <div class="head">
-    
     </div>
     <div class="brand m-5">
         <div class="brand-name m-5 p-2">
             <p class="display-4">Bijaya Home Decor</p>
             <p class="h6 description">Transform Your Home with Exquisite Furniture Creations</p>
-        <button class="btn btn-primary" asp-area="" asp-controller="Products" asp-action="Index">Shop Now</button>
+        <a class="btn btn-primary" asp-controller="Shop" asp-action="Shop">Shop Now</a>
         </div>
         <div class="image me-5 mb-5">
             <img class="img-fluid rounded-6" src="img/sof.jpg" alt="" class="image-1">
@@ -30,7 +67,6 @@
             <img src="img/lights.png" alt="" class="lights">
         </div>
     </div>
-
     <div class="categories-section m-5">
         <div class="categories-title m-5 mt-0">
             <p class="h2"><strong>Categories</strong></p>
@@ -38,58 +74,70 @@
         </div>
         <div class="row row-cols-1 row-cols-md-3 g-4 m-5 mt-0">
             <div class="col">
-                <div class="card shadow h-100">
-                    <img src="img/sofa.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Sofa</h5>
-                        <p class="card-text">120.</p>
+                <a class="text-decoration-none" asp-controller="Shop" asp-action="Shop" asp-all-route-data="sofa">
+                    <div class="card shadow h-100">
+                        <img src="img/sofa.png" class="card-img-top" alt="...">
+                    <div class="card-body category">
+                            <h5 class="card-title">Sofa</h5>
+                            <p class="card-text">120.</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col">
+            <a class="text-decoration-none" asp-controller="Shop" asp-action="Shop" asp-all-route-data="chair">
                 <div class="card shadow h-100">
                     <img src="img/Chair.png" class="card-img-top" alt="...">
-                    <div class="card-body">
+                    <div class="card-body category">
                         <h5 class="card-title">Chairs</h5>
                         <p class="card-text">120</p>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col">
+            <a class="text-decoration-none" asp-controller="Shop" asp-action="Shop" asp-all-route-data="curtain">
                 <div class="card shadow h-100">
                     <img src="img/Curtain.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
+                    <div class="card-body category">
                         <h5 class="card-title">Curtains</h5>
                         <p class="card-text">120</p>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col">
+            <a class="text-decoration-none" asp-controller="Shop" asp-action="Shop" asp-all-route-data="bed">
                 <div class="card shadow h-100">
                     <img src="img/Bed.png" class="card-img-top" alt="...">
-                    <div class="card-body">
+                    <div class="card-body category">
                         <h5 class="card-title">Beds</h5>
                         <p class="card-text">120</p>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col">
+            <a class="text-decoration-none" asp-controller="Shop" asp-action="Shop" asp-all-route-data="kitchen">
                 <div class="card shadow h-100">
                     <img src="img/dINING.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
+                    <div class="card-body category">
                         <h5 class="card-title">Dinning Tables</h5>
                         <p class="card-text">120</p>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col">
+            <a class="text-decoration-none" asp-controller="Shop" asp-action="Shop" asp-all-route-data="wardrobe">
                 <div class="card shadow h-100">
                     <img src="img/wardrobe.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
+                    <div class="card-body category">
                         <h5 class="card-title">wardrobe</h5>
                         <p class="card-text">120</p>
                     </div>
                 </div>
+                </a>
             </div>
         </div>
     </div>

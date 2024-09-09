@@ -16,37 +16,37 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var item in Model.CartItems)
+            @foreach (var item in Model.CartItems)
             {
-            <tr>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <img src="@item.Product.ImageUrl" class="img-fluid" alt="Sofa" style="width: 120px; border-radius: 10px;">
-                    </div>
-                </td>
-                <td>
-                    <div class="quantity-control">
-                        <button class=" btn btn-outline-primary" onclick="">-</button>
-                        <input class="btn btn-outline-primary quantity" type="text" value="@item.Quantity" readonly>
-                        <button class="btn btn-outline-primary" onclick="">+</button>
-                    </div>
-                </td>
-                    <td>Rs @item.UnitPrice</td>
-                    <td>Rs @item.TotalPrice</td>
-                <td>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="@item.Product.ImageUrl" class="img-fluid" alt="Sofa" style="width: 120px; border-radius: 10px;">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="quantity-control">
+                            <a class="btn btn-outline-primary decrement-btn" data-product-id="@item.Id">-</a>
+                            <input id="quantity_@item.Id" class="btn btn-outline-primary quantity" type="text" value="@item.Quantity" readonly>
+                            <a class="btn btn-outline-primary increment-btn" data-product-id="@item.Id">+</a>
+                        </div>
+                    </td>
+                    <td id="unitPrice">Rs @item.UnitPrice</td>
+                    <td id="totalPrice_@item.Id" class="totalPrice">Rs @item.TotalPrice</td>
+                    <td>
                         <form method="post" asp-controller="Carts" asp-action="RemoveFromCart">
                             <input type="hidden" name="cartItemId" value="@Html.ValueFor(model => item.Id)" />
                             <button class="btn btn-link text-danger p-0">×</button>
                         </form>
-                </td>
-            </tr>
-                
+                    </td>
+                </tr>
             }
-    <div class="d-flex justify-content-between">
-        <a href="#" class="continue-shopping">&larr; Continue shopping</a>
-        <span class="cart-total">Total: Rs @Model.GrandTotal </span>
-    </div>
         </tbody>
+        <div class="d-flex justify-content-between">
+            <a asp-controller="Shop" asp-action="Shop" class="continue-shopping">&larr; Continue shopping</a>
+            <span class="cart-total" id="grandTotal">Total: Rs @Model.GrandTotal </span>
+        </div>
+
     </table>
-    <button type="submit" class="btn btn-primary mt-4">Checkout</button>
+    <a type="submit" class="btn btn-primary mt-4" asp-action="Checkout">Checkout</a>
 </div>

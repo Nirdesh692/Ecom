@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Ecom.Models;
 using Ecom.Services;
 using Ecom.Data;
+using Ecom.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddEntityFrameworkStores<ProductDbContext>();
 
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IShopService,  ShopService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -27,6 +30,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

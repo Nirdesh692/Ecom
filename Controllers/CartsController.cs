@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ecom.Models;
-using Ecom.Services;
 using Microsoft.AspNetCore.Identity;
+using Ecom.Services.Interface;
+using Ecom.ViewModel;
 
 namespace Ecom.Controllers
 {
@@ -35,7 +36,7 @@ namespace Ecom.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(Guid productId, int quantity = 1)
+        public async Task<IActionResult> AddToCart(Guid productId, int quantity)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -82,7 +83,7 @@ namespace Ecom.Controllers
         public async Task<IActionResult> GetCartItemCount()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (User == null)
+            if (user == null)
             {
                 return Json(new { cartItemCount = 0 });
             }
@@ -90,5 +91,36 @@ namespace Ecom.Controllers
             var cartItemCount = cart?.CartItems?.Sum(q => q.Quantity) ?? 0;
             return Json(new { cartItemCount });
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantity(Guid CartItemId, int quantity)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            _cartService.UpdateQuantity(user.Id, CartItemId, quantity);
+
+            var cart = _cartService.GetCart(user.Id);
+            var cartItemCount = cart.CartItems.Sum(ci => ci.Quantity);
+            var updatedItem = cart.CartItems.FirstOrDefault(ci => ci.Id == CartItemId);
+            var TotalPrice = updatedItem.Quantity * updatedItem.UnitPrice;
+            var grandTotal = cart.GrandTotal;
+
+            return Json(new { success = true, cartItemCount, grandTotal, TotalPrice, updatedItem.Quantity });
+        }
+        public async Task<IActionResult> Checkout()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var cart = _cartService.GetCart(user.Id);
+            ICollection<CartItem> cartItems = cart.CartItems;
+            var model = new CheckoutView
+            {
+                User = user,
+                Cart = cart,  
+                ShippingDetail = new ShippingDetail(),  
+                CartItems = cartItems
+            };
+
+            return View(model);
+        }
+
     }
 }

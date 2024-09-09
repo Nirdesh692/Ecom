@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ecom.Models;
 using Microsoft.AspNetCore.Authorization;
 using Ecom.Data;
+using Ecom.ViewModel;
 
 namespace Ecom.Controllers
 {
@@ -39,7 +40,7 @@ namespace Ecom.Controllers
             var product = await _context.Products
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (product == null) 
             {
                 return NotFound();
             }
@@ -186,12 +187,7 @@ namespace Ecom.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        
-        public async Task<IActionResult> Shop()
-        {
-            var productDbContext = _context.Products.Include(p => p.Category);
-            return View(await productDbContext.ToListAsync());
-        }
+
 
         private bool ProductExists(Guid id)
         {

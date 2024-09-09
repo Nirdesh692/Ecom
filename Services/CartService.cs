@@ -1,5 +1,6 @@
 ﻿using Ecom.Data;
 using Ecom.Models;
+using Ecom.Services.Interface;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,6 +59,26 @@ namespace Ecom.Services
             }
         }
 
+        public void UpdateCartQuantity(string userId, Guid productId, int quantity)
+        {
+            var cart = GetCart(userId);
+            if (cart == null)
+            {
+                throw new Exception("Cart not found");
+            }
+
+            var cartItem = cart.CartItems.FirstOrDefault(c => c.ProductId == productId);
+            if (cartItem != null)
+            {
+                cartItem.Quantity = quantity;
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Cart item not found");
+            }
+        }
+
         public void RemoveFromCart(string UserId, Guid cartItemId)
         {
             var cart = GetCart(UserId);
@@ -72,6 +93,25 @@ namespace Ecom.Services
                 _context.SaveChanges();
             }
         } 
+
+        public void UpdateQuantity(string UserId, Guid cartItemId, int quantity)
+        {
+            var cart = GetCart(UserId);
+            if (cart == null)
+            {
+                return;
+            }
+            var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == cartItemId);
+            if (cartItem != null)
+            {
+                cartItem.Quantity+=quantity;
+                if (cartItem.Quantity == 0)
+                {
+                    cart.CartItems.Remove(cartItem);
+                }
+                _context.SaveChanges();
+            }
+        }
 
         public void ClearCart(string UserId)
         {

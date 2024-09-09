@@ -1,0 +1,81 @@
+﻿@model Ecom.ViewModel.ShopView
+@{
+    ViewData["Title"] = "Products";
+    int totalPages = (int)Math.Ceiling((double)Model.TotalProducts / 12);
+}
+<div class="row">
+        <div class="col-3">
+            @await Html.PartialAsync("_Sidebar")
+        </div>
+    <div class="col-9">
+        <div class="row">
+            <div class="navbar">
+                <form method="get" class="d-flex" role="search" action="@Url.Action("Search", "Shop")">
+                    <input name="searchString" class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                           value="@(ViewContext.HttpContext.Request.Query["searchString"].ToString())" />
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Order by:
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="@Url.Action("Shop", new { sortOrder = "lowtohigh" })">Low to High</a></li>
+                        <li><a class="dropdown-item" href="@Url.Action("Shop", new { sortOrder = "hightolow" })">High to Low</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <p class="h4">Search Results</p>
+        </div>
+        <div class="row">
+            @if (Model.Products.Count() != 0)
+            {
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow h-100" data-url="@Url.Action("Details", "Products", new { id = product.Id })" onclick="window.location=this.dataset.url">
+                            <img src="@product.ImageUrl" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">@product.Name</h5>
+                                <p class="card-text">Rs @product.Price/-</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="h5"> No Products found.</p>
+            }
+        </div>
+        <div class="row">
+            <div class="col offset-10">
+                <nav>
+                    <ul class="pagination">
+                        @if (Model.PageNumber > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("Shop", new { pageNumber = Model.PageNumber - 1 })">Previous</a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Shop", new { pageNumber = i })">@i</a>
+                            </li>
+                        }
+                        @if ((Model.TotalProducts / 12) >= Model.PageNumber)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("Shop", new { pageNumber = Model.PageNumber + 1 })">Next</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

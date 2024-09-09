@@ -99,3 +99,77 @@ iconify-icon {
 .quantity{
     width :14% !important
 }
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 28px; /* Adjust the height to fit the slider thumbs */
+}
+
+input[type="range"] {
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    background: transparent;
+    pointer-events: none;
+}
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 20px;
+        width: 20px;
+        background-color: #007bff; /* Bootstrap's primary color */
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: all;
+        position: relative;
+        z-index: 2;
+    }
+
+    input[type="range"].max-slider::-webkit-slider-thumb {
+        z-index: 3; /* Make sure max slider is on top */
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        height: 20px;
+        width: 20px;
+        background-color: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+    }
+
+    input[type="range"].max-slider::-moz-range-thumb {
+        z-index: 3;
+    }
+
+    input[type="range"]:focus {
+        outline: none;
+    }
+    .category{
+        color: #000;
+    }
+.cart-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-icon {
+    font-size: 40px; 
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px; 
+    right: -10px; 
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.actions{
+    width:200px;
+}

@@ -3,16 +3,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ecom.Models;
 using Ecom.Data;
+using Microsoft.AspNetCore.Identity;
+using Ecom.Services.Interface;
+using Ecom.ViewModel;
 
 namespace Ecom.Controllers
 {
     public class OrdersController : Controller
     {
         private readonly ProductDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly IOrderService _orderService;
+        private readonly ICartService _cartService;
 
-        public OrdersController(ProductDbContext context)
+        public OrdersController(ProductDbContext context, UserManager<User> userManager, IOrderService orderService, ICartService cartService)
         {
             _context = context;
+            _userManager = userManager;
+            _orderService = orderService;
+            _cartService = cartService;
         }
 
         // GET: Orders
@@ -32,6 +41,7 @@ namespace Ecom.Controllers
 
             var order = await _context.Orders
                 .Include(o => o.User)
+                .Include(c => c.OrderItems)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -42,28 +52,25 @@ namespace Ecom.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create()
-        {
-            ViewData["UserId"] = new SelectList(_context.Set<User>(), "Id", "Id");
-            return View();
-        }
-
-        // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Order order)
+        public async Task<IActionResult> Create(CheckoutView model)
         {
-            if (ModelState.IsValid)
-            {
-                order.Id = Guid.NewGuid();
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UserId"] = new SelectList(_context.Set<User>(), "Id", "Id", order.UserId);
-            return View(order);
+            var user = await _userManager.GetUserAsync(User);
+
+            // Add Order and Shipping Details
+            _orderService.AddOrders(user.Id, (double)model.TotalAmount);
+            var order = _orderService.GetOrder(user.Id);
+
+            _orderService.AddShippingDetails(user.Id, order.Id, model.ShippingDetail);
+
+            // Add Order Items (assuming CartItems is included in the view model)
+            var cart = _cartService.GetCart(user.Id);
+            ICollection<CartItem> cartItems = cart.CartItems;
+            _orderService.AddOrderItems(cartItems, order.Id, cart);
+            _cartService.ClearCart(user.Id);
+
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Orders/Edit/5

@@ -2,16 +2,21 @@
 
 @{
     ViewData["Title"] = "Index";
+    int serialNumber = 1;
 }
 
-<h1>Index</h1>
+<h1 class="text-center">All Products</h1>
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Create New</a>
+<p class="offset-10">
+    <a class="btn btn-primary" asp-action="Create"><iconify-icon icon="gridicons:create"></iconify-icon> Create New</a>
 </p>
-<table class="table">
+<div class="container">
+    <table class="table">
     <thead>
         <tr>
+            <th>
+                S.N.
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -31,8 +36,12 @@
         </tr>
     </thead>
     <tbody>
+
 @foreach (var item in Model) {
         <tr>
+            <td>
+            @serialNumber
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -48,11 +57,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
-            <td>
-                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <td class="actions">
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id"><iconify-icon icon="carbon:edit"></iconify-icon> Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><iconify-icon icon="ic:baseline-delete"></iconify-icon> Delete</a>
             </td>
         </tr>
+    serialNumber++;
 }
     </tbody>
 </table>
+
+</div>
