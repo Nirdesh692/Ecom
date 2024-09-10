@@ -11,7 +11,7 @@
     <a class="btn btn-primary" asp-action="Create"><iconify-icon icon="gridicons:create"></iconify-icon> Create New</a>
 </p>
 <div class="container">
-    <table class="table">
+    <table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>
@@ -38,7 +38,7 @@
     <tbody>
 
 @foreach (var item in Model) {
-        <tr>
+                <tr data-url="@Url.Action("Details", new { id = item.Id })" onclick="window.location=this.dataset.url">
             <td>
             @serialNumber
             </td>

@@ -42,6 +42,7 @@ namespace Ecom.Controllers
             var order = await _context.Orders
                 .Include(o => o.User)
                 .Include(c => c.OrderItems)
+                .ThenInclude(p=>p.Product)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -160,6 +161,18 @@ namespace Ecom.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> UpdateOrderStatus(Guid id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if(order == null)
+            {
+                return NotFound();
+            }
+            order.OrderStatus = "Delivered";
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
         private bool OrderExists(Guid id)
         {
             return _context.Orders.Any(e => e.Id == id);
