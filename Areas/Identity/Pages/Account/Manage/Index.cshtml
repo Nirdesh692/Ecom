@@ -1,0 +1,54 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">
+                Name 
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(Model => Model.FirstName)
+                @Html.DisplayFor(Model => Model.LastName)
+            </dd>
+            <dt class="col-sm-4">
+                Email 
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(Model => Model.Username)
+            </dd>
+            <dt class="col-sm-4">
+                Phone Number 
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(Model => Model.PhoneNumber)
+            </dd>
+        </dl>
+        <hr />
+        @if (User.IsInRole("Admin"))
+        {
+            <dl class="row">
+                <dt class="col-12">
+                    Shipping Address
+                </dt>
+                @foreach (var item in Model.ShippingDetails)
+                {
+                    <dd class="col-sm-4">
+                        @Html.DisplayFor(model => item.ShippingAddress)
+                    </dd>
+
+                }
+
+            </dl>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

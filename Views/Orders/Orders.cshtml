@@ -1,0 +1,41 @@
+﻿@* @model Ecom.ViewModel.OrderView
+
+<div class="row">
+    <div class="col-12">
+        <p class="h5">Your Orders</p>
+        @foreach(var item in Model.Orders)
+        {
+            <dl class="row">
+                <dt>Order Id:</dt>
+                <dd>
+                    @Html.DisplayFor(Model => item.Id)
+                </dd>
+                <dd>
+                    Date: @Html.DisplayFor(Model => item.OrderDate)
+                </dd>
+            </dl>
+            <hr />
+            <div class="row">
+                <dl class="col-smm-4">
+
+                    <dt>Contact</dt>
+                    <dd>
+                        @Html.DisplayFor(Model=>item.User.FirstName)
+                        @Html.DisplayFor(Model=>item.User.LastName)
+                    </dd>
+                    <dd>
+                        Phone: @Html.DisplayFor(Model=>item.User.PhoneNumber)
+                    </dd>
+                    <dd>
+                        Email: @Html.DisplayFor(Model => item.User.UserName)
+                    </dd>
+                </dl>
+                <dl class="col-sm-4">
+                    <dt>Shipping Address</dt>
+                    <dd>@Html.DisplayFor(Model=>Model.ShippingDetails)</dd>
+                </dl>
+            </div>
+        }
+        
+    </div>
+</div> *@

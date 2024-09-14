@@ -1,0 +1,60 @@
+﻿@page
+@model Ecom.Areas.Identity.Pages.Account.Manage.OrdersModel
+@{
+    ViewData["Title"] = "Your Orders";
+}
+
+<div class="row">
+    <div class="col-12">
+        <p class="h5">Your Orders</p>
+
+        @if (Model.Orders != null && Model.Orders.Any())
+        {
+            foreach (var item in Model.Orders)
+            {
+                <dl class="row">
+                    <dt>Order Id:</dt>
+                    <dd>
+                        @Html.DisplayFor(model => item.Id)
+                    </dd>
+                    <dd>
+                        Date: @Html.DisplayFor(model => item.OrderDate)
+                    </dd>
+                </dl>
+                <hr />
+                <div class="row">
+                    <dl class="col-sm-4">
+                        <dt>Contact</dt>
+                        <dd>
+                            @Html.DisplayFor(model => item.User.FirstName)
+                            @Html.DisplayFor(model => item.User.LastName)
+                        </dd>
+                        <dd>
+                            Phone: @Html.DisplayFor(model => item.User.PhoneNumber)
+                        </dd>
+                        <dd>
+                            Email: @Html.DisplayFor(model => item.User.UserName)
+                        </dd>
+                    </dl>
+                    <dl class="col-sm-4">
+                        <dt>Shipping Address</dt>
+                        <dd>
+                            @if (Model.ShippingDetailsByOrderId.ContainsKey(item.Id))
+                            {
+                                <p>@Model.ShippingDetailsByOrderId[item.Id].ShippingAddress</p>
+                            }
+                            else
+                            {
+                                <p>No shipping details found</p>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="fs-5 disabled"> No Orders found</p>
+        }
+    </div>
+</div>

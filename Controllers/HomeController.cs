@@ -7,22 +7,15 @@ namespace Ecom.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(UserManager<User> userManager, ILogger<HomeController> logger)
-        {
-            _userManager = userManager;
-            _logger = logger;
-        }
 
-        public IActionResult Index()
+        public async Task<ActionResult> Index()
         {
 
             return View();
         }
 
-        public IActionResult Privacy()
+        public ActionResult Privacy()
         {
             return View();
         }

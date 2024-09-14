@@ -13,10 +13,10 @@
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
-    </head>
-    <body>
+</head>
+<body>
     <div class="login-container w-25">
-        <a class= asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logo.png" alt="logo.png" class="img-logo"></a><h1 class="h3 mb-3 font-weight-normal">Login</h1>
+        <a class=asp-area ="" asp-controller="Home" asp-action="Index"><img src="~/img/logo.png" alt="logo.png" class="img-logo"></a><h1 class="h3 mb-3 font-weight-normal">Login</h1>
         <form id="account" method="post">
             <div class="form-group">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -41,15 +41,15 @@
     </div>
 
 
-<div class="footer">
-    Copyright © Bijaya Home Decor 2024
-</div>
+    <div class="footer">
+        Copyright © Bijaya Home Decor 2024
+    </div>
 
- <img src="~/img/background.png" alt="Chair" class="background-chair w-100">
+    <img src="~/img/background.png" alt="Chair" class="background-chair w-100">
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
 
 </body>
 </html>

@@ -173,3 +173,24 @@ input[type="range"] {
 .actions{
     width:200px;
 }
+.profile {
+    color: #114683;
+    font-size: 48px
+}
+.rating {
+    display: flex;
+}
+
+    .rating i {
+        color: #e0e0e0; /* Default color (unlit) */
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+        .rating i.lit {
+            color: #ffc107; /* Color when lit */
+        }
+
+        .rating i.hover {
+            color: #ffca28; /* Color on hover */
+        }

@@ -7,23 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ecom.Models;
 using Ecom.Data;
+using Ecom.Services.Interface;
 
 namespace Ecom.Controllers
 {
     public class ReviewsController : Controller
     {
         private readonly ProductDbContext _context;
+        private readonly IReviewService _reviewService;
 
-        public ReviewsController(ProductDbContext context)
+        public ReviewsController(ProductDbContext context, IReviewService reviewService)
         {
             _context = context;
+            _reviewService = reviewService;
         }
 
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            var productDbContext = _context.Reviews.Include(r => r.Product).Include(r => r.User);
-            return View(await productDbContext.ToListAsync());
+            var reviews = _reviewService.GetReviews();
+            return View(reviews);
         }
 
         // GET: Reviews/Details/5

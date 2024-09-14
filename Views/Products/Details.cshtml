@@ -1,56 +1,140 @@
-﻿@model Ecom.Models.Product
+﻿@model Ecom.ViewModel.ProductView
 @{
     ViewData["Title"] = "Product's Details";
+    List<int> ratings = new List<int>();
+    int fullStars=0;
+    int emptyStars = 0;
+    if(Model.Reviews.Any())
+    {
+        foreach (var item in Model.Reviews)
+        {
+            ratings.Add(item.Rating);
+        }
+        fullStars = (int)ratings.Average();
+        int totalStars = 5;
+        emptyStars = totalStars - fullStars;
+    }
+    else
+    {
+        fullStars = 5;
+    }
 }
-<div>
+<div class="container">
     <dl class="row m-auto">
         <div class="col-6">
-            <img class="img-thumbnail " src="@Model.ImageUrl" alt="image.jpg" /> 
+            <img class="img-thumbnail " src="@Model.Product.ImageUrl" alt="image.jpg" /> 
         </div>
         <div class="col-6">
+            
             <p class="h3">Product's Details</p>
             <dt class="col-sm-2">
-               @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Product.Name)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Name)
+                @Html.DisplayFor(model => model.Product.Name)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Product.Description)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Description)
+                @Html.DisplayFor(model => model.Product.Description)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Product.Price)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Price)
+                @Html.DisplayFor(model => model.Product.Price)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.StockQuantity)
+                @Html.DisplayNameFor(model => model.Product.StockQuantity)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.StockQuantity)
+                @Html.DisplayFor(model => model.Product.StockQuantity)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.Product.Category)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Category.Name)
+                @Html.DisplayFor(model => model.Product.Category.Name)
             </dd>
-            <div class="d-inline">
-                <form method="post"> 
-                    <input type="hidden" name="productId" value="@Html.ValueFor(model => model.Id)" />
-                    <button id="add-to-cart-btn" type="button" class="btn btn-primary add-to-cart-btn" data-product-id="@Model.Id">Add to Cart</button>
+            <div class="rating d-flex align-items-center">
+                @for (int i = 0; i < fullStars; i++)
+                {
+                    <i class="fas fa-star text-warning"></i>
+                }
+
+                @for (int i = 0; i < emptyStars; i++)
+                {
+                    <i class="far fa-star text-muted"></i>
+                }
+
+                <span class="ms-2 text-muted">(@fullStars) @Model.Reviews.Count() reviews</span>
+            </div>
+            <div class="d-flex justify-content-evenly">
+                <form method="post">
+                    <input type="hidden" name="productId" value="@Html.ValueFor(model => model.Product.Id)" />
+                    <button id="add-to-cart-btn" type="button" class="btn btn-primary add-to-cart-btn" data-product-id="@Model.Product.Id">Add to Cart</button>
                 </form>
-                <form method="post" asp-controller="Carts" asp-action="BuyNow"> 
-                    <input type="hidden" name="productId" value="@Html.ValueFor(model => model.Id)" />
+                <form method="post" asp-controller="Carts" asp-action="BuyNow">
+                    <input type="hidden" name="productId" value="@Html.ValueFor(model => model.Product.Id)" />
                     <button class="btn btn-primary">Buy Now</button>
                 </form>
             </div>
         </div>
-    </dl>
-</div>
 
+    </dl>
+    <div class="row m-4 ms-0">
+        <div class="col-sm-6 mb-4 d-flex">
+            <!-- Add Review Section -->
+            <div class="card shadow-sm mb-4 w-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Add a Review</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddReview" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Rating</label>
+                                <div class="rating d-flex align-items-center" id="rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="fas fa-star text-warning" data-value ="@i"></i>
+                                    }
+                                </div>
+                            <input type="hidden" id="ratingValue" name="Rating">
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" name="reviewText" rows="3" placeholder="Write your review..."></textarea>
+                        </div>
+                        <input type="hidden" name="productId" value="@Model.Product.Id" />
+                        <button type="submit" class="btn btn-success w-100">Submit Review</button>
+                    </form>
+                </div>
+            </div>            
+        </div>
+        <div class="col-sm-6 mb-4 d-flex">
+            <div class="card shadow-sm mb-4 w-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Customer Reviews</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Reviews.Any())
+                    {
+                        @foreach (var review in Model.Reviews)
+                        {
+                            <div class="mb-3 border-bottom pb-2">
+                                <p><strong>Rating:</strong> @review.Rating Stars</p>
+                                <small class="text-muted">Reviewed on: @review.ReviewDate.ToShortDateString()</small>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 

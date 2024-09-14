@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc
 @inject UserManager<User> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,16 +11,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Ecom</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
 
 </head>
+
 <body>
     @if (ViewData["Title"] == "Log in" || ViewData["Title"] == "Register")
     {
         <div class="body">
             @RenderBody()
-
         </div>
     }
     else
@@ -31,21 +36,24 @@
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                     <li class="nav-item pe-5">
-                                        <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")" aria-current="page">Home</a>
+                                        <a asp-controller="Home" asp-action="Index" class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"] != null && ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")" aria-current="page">Home</a>
                                     </li>
                                     @if (User.IsInRole("Admin"))
-                                    {
+                                    { 
                                         <li class="nav-item pe-5">
-                                            <a class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"].ToString() == "Products" ? "active" : "")" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                                            <a class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"] != null && ViewContext.RouteData.Values["controller"].ToString() == "Products" ? "active" : "")" asp-controller="Products" asp-action="Index">Products</a>
                                         </li>
                                         <li class="nav-item pe-5">
-                                            <a class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"].ToString() == "Orders" ? "active" : "")" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+                                            <a class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"] != null && ViewContext.RouteData.Values["controller"].ToString() == "Orders" ? "active" : "")" asp-controller="Orders" asp-action="Index">Orders</a>
+                                        </li>
+                                        <li class="nav-item pe-5">
+                                            <a class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"] != null && ViewContext.RouteData.Values["controller"].ToString() == "Reviews" ? "active" : "")" asp-controller="Reviews" asp-action="Index">Reviews</a>
                                         </li>
                                     }
                                     else
                                     {
                                         <li class="nav-item pe-5">
-                                            <a class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"].ToString() == "Shop" ? "active" : "")" asp-area="" asp-controller="Shop" asp-action="Shop">Shop</a>
+                                            <a class="nav-link fs-6 fw-bold @(ViewContext.RouteData.Values["controller"] != null && ViewContext.RouteData.Values["controller"].ToString() == "Shop" ? "active" : "")" asp-controller="Shop" asp-action="Shop">Shop</a>
                                         </li>
                                         <li class="nav-item pe-5">
                                             <a class="nav-link fs-6 fw-bold">About us</a>
@@ -53,7 +61,6 @@
                                         <li class="nav-item pe-5">
                                             <a class="nav-link fs-6 fw-bold">Contact</a>
                                         </li>
-
                                     }
                                 </ul>
                                 @await Html.PartialAsync("_LoginPartial")
@@ -61,7 +68,7 @@
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                            @if(!User.IsInRole("Admin"))
+                             @if(!User.IsInRole("Admin"))
                             {
                                 <a asp-controller="Carts" asp-action="Index" class="cart-wrapper">
                                     <iconify-icon class="cart-icon" icon="solar:cart-line-duotone" noobserver></iconify-icon>
@@ -78,20 +85,19 @@
                 @RenderBody()
             </main>
         </div>
-
         <footer class="border-top footer text-muted">
             <div class="container">
                 &copy; 2024 - Ecom
             </div>
         </footer>
-
     }
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/review.js" asp-append-version="true"></script>
     <script src="~/js/cart.js" asp-append-version="true"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

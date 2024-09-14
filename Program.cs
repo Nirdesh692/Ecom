@@ -22,6 +22,8 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IShopService,  ShopService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IShippingDetailsService, ShippingDetailsSerivce>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -30,10 +32,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
-
-
-
-
+ 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

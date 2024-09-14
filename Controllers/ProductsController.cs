@@ -9,16 +9,19 @@ using Ecom.Models;
 using Microsoft.AspNetCore.Authorization;
 using Ecom.Data;
 using Ecom.ViewModel;
+using Ecom.Services.Interface;
 
 namespace Ecom.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly ProductDbContext _context;
+        private readonly IReviewService _reviewService;
 
-        public ProductsController(ProductDbContext context)
+        public ProductsController(ProductDbContext context, IReviewService reviewService)
         {
             _context = context;
+            _reviewService = reviewService;
         }
 
         // GET: Products
@@ -40,12 +43,18 @@ namespace Ecom.Controllers
             var product = await _context.Products
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            var review = _reviewService.GetReviewsForProduct(product.Id);
             if (product == null) 
             {
                 return NotFound();
             }
+            var model = new ProductView
+            {
+                Product = product,
+                Reviews = review
+            };
 
-            return View(product);
+            return View(model);
         }
 
         // GET: Products/Create

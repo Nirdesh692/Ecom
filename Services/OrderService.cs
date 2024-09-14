@@ -12,9 +12,10 @@ namespace Ecom.Services
         {
             _context = context;
         }
-        public Order GetOrder(string Id)
+        public ICollection<Order> GetOrder(string Id)
         {
-            return _context.Orders.FirstOrDefault(o=>o.UserId==Id);
+            var orders = _context.Orders.Where(o=>o.UserId==Id);
+            return orders.ToList();
         }
         public void AddOrders(string Id, double totalAmount)
         {

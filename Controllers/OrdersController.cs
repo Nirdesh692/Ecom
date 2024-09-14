@@ -15,13 +15,15 @@ namespace Ecom.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
+        private readonly IShippingDetailsService _shippingDetailsService;
 
-        public OrdersController(ProductDbContext context, UserManager<User> userManager, IOrderService orderService, ICartService cartService)
+        public OrdersController(ProductDbContext context, UserManager<User> userManager, IOrderService orderService, ICartService cartService, IShippingDetailsService shippingDetailsService)
         {
             _context = context;
             _userManager = userManager;
             _orderService = orderService;
             _cartService = cartService;
+            _shippingDetailsService = shippingDetailsService;
         }
 
         // GET: Orders
@@ -61,7 +63,7 @@ namespace Ecom.Controllers
 
             // Add Order and Shipping Details
             _orderService.AddOrders(user.Id, (double)model.TotalAmount);
-            var order = _orderService.GetOrder(user.Id);
+            var order = _orderService.GetOrder(user.Id).LastOrDefault();
 
             _orderService.AddShippingDetails(user.Id, order.Id, model.ShippingDetail);
 
@@ -173,6 +175,23 @@ namespace Ecom.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        //public async Task<IActionResult> Orders( string status)
+        //{
+        //    var shippingDetails = new ShippingDetail();
+        //    var user = await _userManager.GetUserAsync(User);
+        //    var orders = _orderService.GetOrder(user.Id).Where(o=>o.OrderStatus == status);
+        //    foreach(var order in orders)
+        //    {
+        //        shippingDetails = _shippingDetailsService.GetShippingDetails(user.Id).FirstOrDefault(o=>o.OrderId ==order.Id);
+        //    }
+        //        var model = new OrderView
+        //        {
+        //            Orders = orders,
+        //            ShippingDetails = shippingDetails
+        //        };
+        //    return View(model);
+        //}
+
         private bool OrderExists(Guid id)
         {
             return _context.Orders.Any(e => e.Id == id);
